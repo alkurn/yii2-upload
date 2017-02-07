@@ -1,0 +1,26 @@
+{
+  "name": "alkurn/yii2-upload",
+  "description": "Yii2 helper for creating and upload file or files",
+  "keywords": ["yii2", "upload", "helper"],
+  "type": "yii2-extension",
+  "license": "MIT",
+  "support": {
+    "issues": "https://gitlab.com/alkurn/yii2-upload/issue",
+    "source": "https://gitlab.com/alkurn/yii2-upload"
+  },
+  "authors": [
+    {
+      "name": "Ganesh",
+      "email": "ganesh.alkurn@gmail.com"
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "yiisoft/yii2": "*" 
+  },
+  "autoload": {
+    "psr-4": {
+      "alkurn\\upload\\": ""
+    }
+  }
+}
