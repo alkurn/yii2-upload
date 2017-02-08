@@ -1,20 +1,24 @@
 <?php 
 
-namespace common\models;
+namespace alkurn\upload;
 use Yii;
 use yii\base\Model;
+use yii\web\UploadedFile;
 
 class Upload extends Model
 {
     public $file;
     public $files;
+    public $uploadsAlias =  '/uploads';
 
-    public function upload()
+    public function upload($model, $field)
     {
-        if ($this->file) {
+        $this->file = UploadedFile::getInstance($model, $field);
+
+        if ($this->file){
 
             $this->file->name = Yii::$app->security->generateRandomString(). '.' . $this->file->extension;
-            $path = Yii::getAlias('@uploads') . '/' . $this->getBaseName();
+            $path = $this->uploadsAlias . '/' . $this->getBaseName();
             $name = $this->file->baseName . '.' . $this->file->extension;
 
             if (! is_dir($path)) {
