@@ -28,7 +28,7 @@ class Upload extends Model
             $this->file->saveAs($path . $name);    
             return $this->getBaseName() . $name;
         } else {
-            return false;
+            return $model->getOldAttribute($field);
         }
     }
     
