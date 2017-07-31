@@ -9,7 +9,7 @@ class Upload extends Model
 {
     public $file;
     public $files;
-    public $storageAlias =  '/storage';
+    public $storageAlias =  '/uploads/storage';
 
     public function upload($model, $field)
     {
