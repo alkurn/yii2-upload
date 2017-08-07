@@ -9,7 +9,7 @@ class Upload extends Model
 {
     public $file;
     public $files;
-    public $storageAlias =  '/uploads/storage';
+    public $uploadsAlias =  '/uploads/storage';
 
     public function upload($model, $field)
     {
@@ -19,7 +19,7 @@ class Upload extends Model
 
             $this->file->name = Yii::$app->security->generateRandomString(). '.' . $this->file->extension;
             $baseName = $this->file->baseName;
-            $path = $this->storageAlias . '/' . $this->getBaseName( $baseName );
+            $path = $this->uploadsAlias . '/' . $this->getBaseName( $baseName );
             $name = $this->file->baseName . '.' . $this->file->extension;
 
             if (! is_dir($path)) {
@@ -41,7 +41,7 @@ class Upload extends Model
 
             $this->file->name = Yii::$app->security->generateRandomString(). '.' . $this->file->extension;
             $baseName = $this->file->baseName;
-            $path = $this->storageAlias . '/' . $this->getBaseName( $baseName );
+            $path = $this->uploadsAlias . '/' . $this->getBaseName( $baseName );
             $name = $this->file->baseName . '.' . $this->file->extension;
 
             if (! is_dir($path)) {
@@ -65,7 +65,7 @@ class Upload extends Model
                 if ($file) {
                     $file->name = Yii::$app->security->generateRandomString() . '.' . $file->extension;
 
-                    $path = $this->storageAlias . '/' . $this->getBaseName( $file->baseName );
+                    $path = $this->uploadsAlias . '/' . $this->getBaseName( $file->baseName );
                     $name = $file->baseName . '.' . $file->extension;
 
                     if (!is_dir($path)) {
