@@ -82,6 +82,32 @@ class Upload extends Model
         return $files;
     }
 
+    public function uploadMultipleByName($field)
+    {
+        $files = [];
+        $this->files = UploadedFile::getInstancesByName($field);
+
+        if ($this->files) {
+
+            foreach ($this->files as $file) {
+                if ($file) {
+                    $file->name = Yii::$app->security->generateRandomString() . '.' . $file->extension;
+
+                    $path = $this->uploadsAlias . '/' . $this->getBaseName( $file->baseName );
+                    $name = $file->baseName . '.' . $file->extension;
+
+                    if (!is_dir($path)) {
+                        mkdir($path, 0777, true);
+                    }
+                    $file->saveAs($path . $name);
+                    $files[] = $this->getBaseName($file->baseName) . $name;
+                }
+            }
+        }
+
+        return $files;
+    }
+
 
     
     public function getBaseName($baseName = null)
