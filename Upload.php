@@ -1,8 +1,9 @@
-<?php 
+<?php
 
 namespace alkurn\upload;
 use Yii;
 use yii\base\Model;
+use yii\helpers\FileHelper;
 use yii\web\UploadedFile;
 
 class Upload extends Model
@@ -26,7 +27,7 @@ class Upload extends Model
                 mkdir($path, 0777, true);
             }
 
-            $this->file->saveAs($path . $name);    
+            $this->file->saveAs($path . $name);
             return $this->getBaseName( $baseName ) . $name;
         } else {
             return $model->getOldAttribute($field);
@@ -108,14 +109,44 @@ class Upload extends Model
         return $files;
     }
 
+    public function uploadWithUrl($url)
+    {
+        $options = self::extendOptions(['url' => $url]);
+        $baseName = Yii::$app->security->generateRandomString();
+        $path = $this->uploadsAlias . '/' . $this->getBaseName( $baseName );
+        $name = $baseName . '.' . $options['extension'];
+        if (! is_dir($path)) {
+            mkdir($path, 0777, true);
+        }
 
-    
+        copy($options['url'], $path . $name);
+        return $this->getBaseName( $baseName ) . $name;
+    }
+
+    protected static function extendOptions(array $options)
+    {
+        $parsedUrl = parse_url($options['url']);
+        $headers = get_headers($options['url'], 1);
+        if (!$parsedUrl || !$headers || !preg_match('/^(HTTP)(.*)(200)(.*)/i', $headers[0])) {
+            $options['error'] = UPLOAD_ERR_NO_FILE;
+        }
+        $options['name'] = isset($parsedUrl['path']) ? pathinfo($parsedUrl['path'], PATHINFO_BASENAME) : '';
+        $options['baseName'] = isset($parsedUrl['path']) ? pathinfo($parsedUrl['path'], PATHINFO_FILENAME) : '';
+        $options['extension'] = isset($parsedUrl['path'])
+            ? mb_strtolower(pathinfo($parsedUrl['path'], PATHINFO_EXTENSION))
+            : '';
+        $options['size'] = isset($headers['Content-Length']) ? $headers['Content-Length'] : 0;
+        $options['type'] = isset($headers['Content-Type'])
+            ? $headers['Content-Type']
+            : FileHelper::getMimeTypeByExtension($options['name']);
+        return $options;
+    }
+
     public function getBaseName($baseName = null)
     {
-
         return chunk_split(substr(preg_replace('/[^A-Za-z0-9\-]/', '', $baseName), 0, 8), 1, '/');
     }
-    
+
     public function createBasePath($path)
     {
         return chunk_split(substr(preg_replace('/[^A-Za-z0-9\-]/', '', $path), 0, 8), 1, '/');
