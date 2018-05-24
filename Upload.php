@@ -114,13 +114,8 @@ class Upload extends Model
         $options = self::extendOptions(['url' => $url]);
         $baseName = Yii::$app->security->generateRandomString();
         $path = $this->uploadsAlias . '/' . $this->getBaseName( $baseName );
-
-        if(!in_array($options['extension'], ['png','jpg','jpeg','gif'])){
-            $name = $baseName . '.' . $options['extension'].'.png';
-        }else{
-            $name = $baseName . '.' . $options['extension'];
-        }
-
+        $name = $baseName . '.' . $options['extension'];
+        $name .= ( !in_array($options['extension'], ['png','jpg','jpeg','gif']) ) ? '.png' : '';
         if (! is_dir($path)) {
             mkdir($path, 0777, true);
         }
