@@ -119,6 +119,7 @@ class Upload extends Model
         if (! is_dir($path)) {
             mkdir($path, 0777, true);
         }
+        
         if(file_exists($options['url'])){
             copy($options['url'], $path . $name);
         }
