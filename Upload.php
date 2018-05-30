@@ -111,6 +111,10 @@ class Upload extends Model
 
     public function uploadWithUrl($url)
     {
+        if(!filter_var($url, FILTER_VALIDATE_URL) || !file_exists($url)){
+            return false;
+        }
+
         $options = self::extendOptions(['url' => $url]);
         $baseName = Yii::$app->security->generateRandomString();
         $path = $this->uploadsAlias . '/' . $this->getBaseName( $baseName );
