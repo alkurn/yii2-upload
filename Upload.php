@@ -118,8 +118,9 @@ class Upload extends Model
         if (! is_dir($path)) {
             mkdir($path, 0777, true);
         }
-
-        copy($options['url'], $path . $name);
+        if(file_exists($options['url'])){
+            copy($options['url'], $path . $name);
+        }
         return $this->getBaseName( $baseName ) . $name;
     }
 
