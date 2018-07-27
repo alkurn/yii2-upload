@@ -109,24 +109,45 @@ class Upload extends Model
         return $files;
     }
 
-    public function uploadWithUrl($url)
+    public function uploadWithUrl($url, $name = null)
     {
-        if(!filter_var($url, FILTER_VALIDATE_URL) || !file_exists($url)){
+        if( !filter_var($url, FILTER_VALIDATE_URL) || !file_exists($url)){
             return false;
         }
 
         $options = self::extendOptions(['url' => $url]);
-        $baseName = Yii::$app->security->generateRandomString();
+        $baseName = !empty($name) ? $name : Yii::$app->security->generateRandomString();
         $path = $this->uploadsAlias . '/' . $this->getBaseName( $baseName );
         $name = $baseName . '.' . $options['extension'];
         $name .= ( !in_array($options['extension'], ['png','jpg','jpeg','gif']) ) ? '.png' : '';
         if (! is_dir($path)) {
             mkdir($path, 0777, true);
         }
-        
+
         if(file_exists($options['url'])){
             copy($options['url'], $path . $name);
         }
+        
+        return $this->getBaseName( $baseName ) . $name;
+    }
+
+    public function uploadWithMapUrl($url, $name = null)
+    {
+        if( !filter_var($url, FILTER_VALIDATE_URL) ){
+            return false;
+        }
+
+        $options = self::extendOptions(['url' => $url]);
+        $baseName = !empty($name) ? $name : Yii::$app->security->generateRandomString();
+        $path = $this->uploadsAlias . '/' . $this->getBaseName( $baseName );
+        $name = $baseName . '.' . $options['extension'];
+        $name .= ( !in_array($options['extension'], ['png','jpg','jpeg','gif']) ) ? '.png' : '';
+        if (! is_dir($path)) {
+            mkdir($path, 0777, true);
+        }
+
+        copy($options['url'], $path . $name);
+
         return $this->getBaseName( $baseName ) . $name;
     }
 
