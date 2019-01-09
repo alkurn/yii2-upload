@@ -37,7 +37,6 @@ class Upload extends Model
     public function uploadByName($model, $field)
     {
         $this->file = UploadedFile::getInstanceByName($field);
-
         if ($this->file){
 
             $this->file->name = Yii::$app->security->generateRandomString(). '.' . $this->file->extension;
