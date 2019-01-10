@@ -12,6 +12,7 @@ class Upload extends Model
     public $files;
     public $uploadsAlias =  '/uploads/storage';
 
+    /* Version 2.0.0 */
     public function upload($model, $field)
     {
         $this->file = UploadedFile::getInstance($model, $field);
