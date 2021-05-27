@@ -74,7 +74,7 @@ class Upload extends Model
         if (!is_dir($path)) {
             mkdir($path, 0755, true);
         }
-        $destPath = $path .'/' . $filename;
+        $destPath = $path . $filename;
         $output = array();
         $cmd = "/usr/bin/ffmpeg -i '$srcFile' -an -ss 00:00:05 -r 1 -vframes 1 -y '$destPath'";
         exec($cmd, $output, $retval);
@@ -86,7 +86,7 @@ class Upload extends Model
             $model = new $this->uploadsModel;
             $model->filename = $filename;
             $model->filesize = $data[0] * $data[1];
-            $model->path = $path;
+            $model->path = $this->getBaseName($filename).$filename;
             $model->mimetype = $data['mime'];
             return $model->save() ? $model->id : null;
         }
