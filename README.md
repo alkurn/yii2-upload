@@ -23,12 +23,13 @@ to the require section of your application's `composer.json` file.
 * Add a new component in `components` section of your application's configuration file (optional), for example:
 
 ```php
-'components' => [
-     'upload' => [
-                'class' => 'alkurn\upload\Upload',
-                'uploadsAlias'  => Yii::getAlias('@uploads/'),
+'components' => [ 
+    'upload' => [
+                'class' =>'alkurn\upload\Upload',
+                'uploadsAlias' => Yii::getAlias('@storage/'),
+                'uploadsModel' => CoreMedia::class,
             ],
-],
+]
 ```
 
 and in `bootstrap` section, for example:
@@ -46,7 +47,5 @@ For example:
 ```php
 use alkurn\upload\Upload;
 
-$image = Yii::$app->upload->upload($model, 'image');
-```
-
-
+$image = Yii::$app->upload->upload('image', $model);
+``` 
